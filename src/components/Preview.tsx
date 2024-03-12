@@ -2,6 +2,7 @@ import React from 'react'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
+import UploadDialog from './UploadDialog'
 
 function Preview() {
   return (
@@ -59,9 +60,7 @@ p-3
        items-center
 flex-row gap-x-4
        '>
- <Button
- className='bg-green-600'
- >Upload Files</Button>
+ <UploadDialog/>
  <Button
  >Start Scanning</Button>
  </div>
