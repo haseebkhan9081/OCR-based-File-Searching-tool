@@ -16,12 +16,15 @@ datasource db {
 
  
 
- model File{
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
- userId   String      
- name String
- type String
- url String
- size  String
- }
+model File {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  name      String
+  type      String
+  url       String
+  size      String
+  createdAt DateTime @default(now()) @map("created_at") // Automatically set to the current timestamp when a record is created
+  updatedAt DateTime @updatedAt                         // Automatically set to the current timestamp when a record is updated
+}
+
  

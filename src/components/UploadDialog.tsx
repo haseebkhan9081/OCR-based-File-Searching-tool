@@ -13,9 +13,10 @@ import { UploadButton} from "@/lib/uploadthing"
 import { toast } from "sonner";
 import axios from "axios";
 import { useState } from "react";
+import { useAllFiles } from "@/app/hooks/useAllFiles";
 const UploadDialog=()=>{
 const [isOpen,setIsOpen]=useState(false)
-
+const {fetchData}=useAllFiles()
 const onSubmit=(name:string,url:string,typ:string,size:number)=>{
 axios.post("/api/uploadthing/upload",{
     name,
@@ -31,6 +32,7 @@ toast.success("file uploaded successfully",{
 toast.error("something went wrong!")
 }).finally(()=>{
     setIsOpen(false)
+    fetchData()
 })
 }
 

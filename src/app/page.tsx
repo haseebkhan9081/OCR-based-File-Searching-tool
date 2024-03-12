@@ -22,6 +22,8 @@ items-center
       
       ">
       <UserButton/>
+      <div
+      className="text-3xl font-bold">TextTracer</div>
       </div>
       <Preview/>
    
