@@ -12,7 +12,7 @@ return (
     mt-10
     flex
     h-full
-     flex-col gap-2 
+     flex-col gap-3 
      items-center
       justify-center'>
         <div
