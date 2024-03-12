@@ -18,7 +18,10 @@ fetchData()
     <div
     className='flex
     flex-col
-    space-y-2'>{isLoading&&<Loader2
+    space-y-2'>
+      {files?.length==0&&"You have not uploaded any files"}
+      
+      {isLoading&&<Loader2
     className='text-sky-600
     animate-spin
     justify-center
