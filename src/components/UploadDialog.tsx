@@ -12,22 +12,32 @@ import { Button } from "./ui/button";
 import { UploadButton} from "@/lib/uploadthing"
 import { toast } from "sonner";
 import axios from "axios";
+import { useState } from "react";
 const UploadDialog=()=>{
+const [isOpen,setIsOpen]=useState(false)
 
-
-const onSubmit=(name:string,url:string,type:string,size:string)=>{
-axios.post("",{
-
+const onSubmit=(name:string,url:string,typ:string,size:number)=>{
+axios.post("/api/uploadthing/upload",{
+    name,
+    url,
+    typ,
+    size
 }).then((res)=>{
-
+toast.success("file uploaded successfully",{
+    description:res.data.name
+})
 }).catch((err)=>{
-    
+    console.log("[src/components/UploadDialog.tsx]",err)
+toast.error("something went wrong!")
+}).finally(()=>{
+    setIsOpen(false)
 })
 }
 
 
- return <Dialog>
+ return <Dialog open={isOpen}>
   <DialogTrigger><Button
+  onClick={()=>setIsOpen(true)}
  className='bg-green-600'
  >Upload Files</Button></DialogTrigger>
   <DialogContent>
@@ -41,9 +51,8 @@ axios.post("",{
     <UploadButton
     endpoint="courseAttachment"
     onClientUploadComplete={(res)=>{
-toast.success("file upload successfully",{
-    description:res?.[0].name
-})
+        onSubmit(res?.[0].name,res?.[0].url,res?.[0].type,res?.[0].size)
+ 
     }}
     />
   </DialogContent>
