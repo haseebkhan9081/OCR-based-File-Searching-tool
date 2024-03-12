@@ -10,6 +10,7 @@ return (
     <div
     className='
     mt-10
+    p-6
     flex
     h-full
      flex-col gap-3 
@@ -24,10 +25,10 @@ return (
             
             <h1
             className='text-xl font-bold
-            md:text-3xl'>Welcome to OCR BASE File Management Tool</h1>
+            md:text-3xl'>Welcome to OCR based File Management Tool</h1>
       <p
       className='text-slate-800 p-3 text-center
-       '> its necessary that you have an acount so that we can make track of your files!</p>
+       '> it&apos;s necessary that you have an acount so that we can  track  your files!</p>
         </div>
         <div>{children}</div>
         
