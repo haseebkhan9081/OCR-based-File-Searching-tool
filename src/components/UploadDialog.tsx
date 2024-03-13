@@ -37,11 +37,12 @@ toast.error("something went wrong!")
 }
 
 
- return <Dialog open={isOpen}>
+ return <Dialog open={isOpen} onOpenChange={setIsOpen}>
   <DialogTrigger><Button
   onClick={()=>setIsOpen(true)}
  className='bg-green-600'
- >Upload Files</Button></DialogTrigger>
+ >Upload Files</Button>
+ </DialogTrigger>
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Ready to Dive In?</DialogTitle>
