@@ -15,7 +15,7 @@ const f = createUploadthing();
   
 export const ourFileRouter = {
     
-courseAttachment:f(["text","pdf"])
+courseAttachment:f(["text","pdf","image"])
 .middleware(()=>handleAuth())
 .onUploadComplete(()=>{}),
 

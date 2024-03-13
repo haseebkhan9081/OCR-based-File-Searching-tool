@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import Link from 'next/link';
 interface FileInfoprops{
  name :string;
  url:string,
@@ -47,7 +48,9 @@ const [isClicked,setisClicked]=useState(false);
       flex-row
       text-lg
       items-center
-      flex'>{name}  <p
+      flex'> <Link href={url} target="_blank" rel="noopener noreferrer">
+      {name}
+    </Link> <p
     className='text-xs text-muted-foreground'>{size}</p>
       {isClicked?<Loader2
       className='animate-spin w-4 text-green-600'/>:<X
