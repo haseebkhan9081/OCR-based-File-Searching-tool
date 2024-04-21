@@ -140,7 +140,7 @@ rounded-md'>
       
    </CardHeader>
                  <CardContent className="flex aspect-square items-center justify-center p-6">
-                 <span className="text-xs font-md text-slate-700">{value?.text.substring(0, 550)}</span>
+                 <span className="text-xs font-md text-slate-700">{value?.text.substring(0, 550)+"..."}</span>
  
                  </CardContent>
                  <CardFooter
