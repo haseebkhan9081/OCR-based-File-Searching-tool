@@ -11,7 +11,7 @@ const {fetchData,files,isLoading}=useAllFiles()
 
 useEffect(()=>{
 fetchData()
-},[])
+},[fetchData])
   return (
     <div
     className='flex
