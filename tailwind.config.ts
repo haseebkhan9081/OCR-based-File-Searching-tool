@@ -18,6 +18,7 @@ const config = {
       },
     },
     extend: {
+      
       colors: {
         custom: {
           'blue-gray': '#27374D',

@@ -1,8 +1,6 @@
 "use client"
-import { File } from '@prisma/client'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { toast } from 'sonner'
+import { File } from '@prisma/client' 
+import React, { useEffect, useState } from 'react' 
 import FileInfo from './File'
 import { useAllFiles } from '@/app/hooks/useAllFiles'
 import { Loader2 } from 'lucide-react'

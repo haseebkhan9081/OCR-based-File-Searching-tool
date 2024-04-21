@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useState } from "react";
 import { useAllFiles } from "@/app/hooks/useAllFiles";
+import { useScanProgressBar } from "@/app/hooks/useProgress";
 const UploadDialog=()=>{
 const [isOpen,setIsOpen]=useState(false)
 const {fetchData}=useAllFiles()
@@ -36,9 +37,11 @@ toast.error("something went wrong!")
 })
 }
 
-
+const {isLoading}=useAllFiles();
+const {progress}=useScanProgressBar()
  return <Dialog open={isOpen} onOpenChange={setIsOpen}>
   <DialogTrigger><Button
+  disabled={isLoading||((progress==100)?false:true)}
   onClick={()=>setIsOpen(true)}
  className='bg-green-600'
  >Upload Files</Button>
@@ -48,7 +51,7 @@ toast.error("something went wrong!")
       <DialogTitle>Ready to Dive In?</DialogTitle>
       <DialogDescription>
       Choose your files to kickstart the magic! You can upload images
-            (PNG, JPG, JPEG, GIF, BMP) or text files (TXT, PDF).
+            (PNG, JPG, JPEG) or PDF.
       </DialogDescription>
     </DialogHeader>
     <UploadButton
