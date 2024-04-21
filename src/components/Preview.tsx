@@ -145,7 +145,7 @@ rounded-md'>
                  </CardContent>
                  <CardFooter
                   className='text-center items-center justify-center'>
-   <p className='text-center text-muted-foreground'>{value.pageNumber}</p>
+   <p className='text-center text-xs text-muted-foreground'>{value.pageNumber}</p>
    </CardFooter>
                </Card>
              </div>
