@@ -49,7 +49,7 @@ const [isClicked,setisClicked]=useState(false);
       text-lg
       items-center
       flex'> <Link href={url} target="_blank" rel="noopener noreferrer">
-      {name}
+      {name.slice(0,21)}{name.length>21&&"..."}
     </Link> <p
     className='text-xs text-muted-foreground'>{size}</p>
       {isClicked?<Loader2

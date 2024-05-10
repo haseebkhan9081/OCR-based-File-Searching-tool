@@ -22,6 +22,9 @@ import { useAllFiles } from '@/app/hooks/useAllFiles'
 import  TextPreview  from './TextPreview'
 import { useScanProgressBar } from '@/app/hooks/useProgress'
 import { useTargetText } from '@/app/hooks/useTargetText'
+import { FoundDialogue } from './FoundDialogue';
+import { Scan as S} from 'lucide-react';
+
 
 function Preview() {
   const {TextMap}=useAllFiles();
@@ -157,6 +160,7 @@ rounded-md'>
             if (isMatch) {
               return (
                 <CarouselItem key={key}>
+                 
                   <div className="p-2">
                     <Card>
                       <CardHeader>
@@ -164,6 +168,7 @@ rounded-md'>
                       </CardHeader>
                       <CardContent className="flex aspect-square items-center justify-center p-6">
                         <p key={key}>
+                        
                           {/* Mapping through textParts to highlight matching parts */}
                           {textParts.map((part, index) => {
                             if (charCount >= 300) {
@@ -199,8 +204,21 @@ rounded-md'>
                         {/* Display ellipsis if text length exceeds 550 characters */}
                       </CardContent>
                       <CardFooter className='text-center items-center justify-center'>
+                        <div
+                        className='flex
+                        flex-row
+                        justify-between
+                        w-full
+                        items-center'>
                         <p className='text-center text-xs text-muted-foreground'>{value.pageNumber}</p>
-                      </CardFooter>
+                        <FoundDialogue
+                        targetText={targetText}
+                        value={value}
+                        key={key}
+                        ><S size={24} color='red'/></FoundDialogue>
+                     
+                        </div>
+                         </CardFooter>
                     </Card>
                   </div>
                 </CarouselItem>

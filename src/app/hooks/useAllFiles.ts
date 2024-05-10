@@ -6,6 +6,7 @@ interface OcrResult {
     documentName: string;
     pageNumber: number;
     text: string;
+    url:string;
   }
 type useAllFilesState = {
   files:File[],

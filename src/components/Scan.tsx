@@ -10,6 +10,7 @@ interface OcrResult {
   documentName: string;
   pageNumber: number;
   text: string;
+  url:string
 }
 function Scan() {const [ocrResults, setOcrResults] = useState<OcrResult[]>([]);
 const {setProgress,progress}=useScanProgressBar()
@@ -39,7 +40,8 @@ const performOCR = async () => {
               const ocrResult = {
                 documentName: files[i].name,
                 pageNumber: imageBase64List.indexOf(base64Image) + 1,
-                text: text
+                text: text,
+                url:files[i]?.url
               };
               setTextMap(files[i].url + ocrResult.pageNumber, ocrResult);
               setOcrResults(prevResults => [...prevResults, ocrResult]);  
@@ -67,7 +69,8 @@ const performOCR = async () => {
           const ocrResult = {
             documentName: files[i].name,
             pageNumber: 1,
-            text: text
+            text: text,
+            url:files[i]?.url
           };
           setTextMap(files[i].url, ocrResult);
           setOcrResults(prevResults => [...prevResults, ocrResult]); 
