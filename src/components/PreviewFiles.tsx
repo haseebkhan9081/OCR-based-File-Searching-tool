@@ -26,9 +26,11 @@ fetchData()
     overflow-y-auto
     items-center
     w-4 h-4'/>}{files?.map((f:File)=>(
+      
 <div
 key={f.id}>
 <FileInfo
+
 createdAt={f?.createdAt}
 updatedAt={f?.updatedAt}
 fetchData={fetchData}

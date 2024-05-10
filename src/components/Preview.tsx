@@ -1,7 +1,7 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { Progress } from "@/components/ui/progress"
-
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
@@ -21,12 +21,25 @@ import Scan from './Scan'
 import { useAllFiles } from '@/app/hooks/useAllFiles'
 import  TextPreview  from './TextPreview'
 import { useScanProgressBar } from '@/app/hooks/useProgress'
+import { useTargetText } from '@/app/hooks/useTargetText'
 
 function Preview() {
   const {TextMap}=useAllFiles();
-   console.log(TextMap.size)
-
+  
+    const {targetText,setTargetText}=useTargetText();
+const {isLoading}=useAllFiles()
    const {progress}=useScanProgressBar() 
+  
+   let timeoutId: NodeJS.Timeout | undefined; // Define the type of timeoutId
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId); // Clear any existing timeout
+    }
+    timeoutId = setTimeout(() => {
+      setTargetText(event.target.value); // Set the target text after 2 seconds
+    }, 1000); // 2000 milliseconds = 2 seconds
+  };
   return (
     <div
     className='
@@ -72,7 +85,8 @@ p-3
        justify-between
        '>
        <Textarea
-       
+       disabled={isLoading||((progress==100)?false:true)}
+       onChange={handleChange}
        placeholder='Search for Text Within Your Files'
        className='
        focus-within:ring-0
@@ -121,45 +135,88 @@ rounded-md'>
     Press the Start Scan button to see the Text Extracted from each document in real time
   </div>
 )}
-{TextMap.size>0&&(<div className='p-6 ring-1
- 
- ring-custom-pale-blue 
- overflow-y-auto  space-y-2  items-center justify-center flex-col w-[600px] h-[400px] rounded-md hidden md:flex'>
-  
-  <Carousel className='w-full max-w-xs'>
-   <CarouselContent
-   
-   className='items-center
-   '>
-   {TextMap.size>0&&Array.from(TextMap).map(([key, value]) => (
-             <CarouselItem key={key}>
-             <div className="p-2">
-               <Card>
-               <CardHeader>
-     <CardTitle className='text-lg text-center'>{value.documentName}</CardTitle>
-      
-   </CardHeader>
-                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                 <span className="text-xs font-md text-slate-700">{value?.text.substring(0, 550)+"..."}</span>
- 
-                 </CardContent>
-                 <CardFooter
-                  className='text-center items-center justify-center'>
-   <p className='text-center text-xs text-muted-foreground'>{value.pageNumber}</p>
-   </CardFooter>
-               </Card>
-             </div>
-           </CarouselItem>
-           ))}
-     
-   </CarouselContent>
-   <CarouselPrevious />
-   <CarouselNext />
- </Carousel>
- 
-  
-   
-   </div> )}
+{TextMap.size > 0 && (
+  <div className='p-6 ring-1 ring-custom-pale-blue overflow-y-auto space-y-2 items-center justify-center flex-col w-[600px] h-[400px] rounded-md hidden md:flex'>
+    {Array.from(TextMap).some(([key, value]) => {
+      const cleanedText = value.text.replace(/\n/g, ' '); // Replace '\n' with space
+      let tct = targetText.replace(/\n/g, ' ');
+      const words = tct.toLowerCase().split(' ');
+      const isMatch = words.some(word => cleanedText.toLowerCase().includes(word.toLowerCase()));
+      return isMatch;
+    }) ? (
+      <Carousel className='w-full max-w-xs'>
+        <CarouselContent className='items-center'>
+          {/* Mapping through TextMap to display matching items */}
+          {Array.from(TextMap).map(([key, value]) => {
+            const cleanedText = value.text.replace(/\n/g, ' '); // Replace '\n' with space
+            let tct = targetText.replace(/\n/g, ' ');
+            const words = tct.toLowerCase().split(' ');
+            const textParts = cleanedText.split(new RegExp(`(${words.join('|')})`, 'gi')); // Split text into parts based on each word in targetText
+            let charCount = 0;
+            const isMatch = words.some(word => textParts.some(part => part.toLowerCase() === word.toLowerCase()));
+            if (isMatch) {
+              return (
+                <CarouselItem key={key}>
+                  <div className="p-2">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className='text-lg text-center'>{value.documentName}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex aspect-square items-center justify-center p-6">
+                        <p key={key}>
+                          {/* Mapping through textParts to highlight matching parts */}
+                          {textParts.map((part, index) => {
+                            if (charCount >= 300) {
+                              return null; // Return null to stop further iteration
+                            }
+                            const isHighlighted = words.some(word => word.length > 0 && part.toLowerCase() === word.toLowerCase());
+                            if (isHighlighted) {
+                              // If the part matches any word from targetText, highlight it
+                              const partLength = part.length;
+                              if (charCount + partLength <= 300) {
+                                charCount += partLength;
+                                return <span className='bg-yellow-400' key={index}>{part}</span>; // Matching part
+                              } else {
+                                const remainingChars = 300 - charCount;
+                                charCount += remainingChars;
+                                return part.slice(0, remainingChars); // Matching part with remaining characters
+                              }
+                            } else {
+                              // If the part doesn't match, display it as is
+                              const partLength = part.length;
+                              if (charCount + partLength <= 300) {
+                                charCount += partLength;
+                                return part; // Non-matching part
+                              } else {
+                                const remainingChars = 300 - charCount;
+                                charCount += remainingChars;
+                                return part.slice(0, remainingChars); // Non-matching part with remaining characters
+                              }
+                            }
+                          })}
+                          {value.text.length > 550 && <span>...</span>}
+                        </p>
+                        {/* Display ellipsis if text length exceeds 550 characters */}
+                      </CardContent>
+                      <CardFooter className='text-center items-center justify-center'>
+                        <p className='text-center text-xs text-muted-foreground'>{value.pageNumber}</p>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              );
+            }
+            return null;
+          })}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    ) : (
+      <div className='text-slate-700 text-center'>Not Found</div>
+    )}
+  </div>
+)}
        </div>
 
         </div>   
