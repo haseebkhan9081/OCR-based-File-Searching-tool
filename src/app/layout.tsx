@@ -7,8 +7,8 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "OCR Based File Searching Tool",
-  description: "Built with love by the group",
+  title: "Text Tracer",
+  description: "Built with love",
 };
 
 export default function RootLayout({
