@@ -1,8 +1,9 @@
 export const dynamic = 'force-dynamic'; // Assuming this import is necessary for your code
-import client from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs"; 
 import axios from "axios";
 import { NextResponse } from "next/server";
+import mammoth from 'mammoth';
+
 
 export async function POST(req: Request) {
   try {
@@ -14,26 +15,25 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 400 });
     }
     
-    console.log("Conversion was requested");
+    console.log("docX processing was requested");
     
     // Start the OCR process asynchronously
-    const response = await initiateOCR(url);
+    const response = await initiateDocXProcessing(url);
     
+ 
     
-    
-    return  NextResponse.json(response.data);
+    return  NextResponse.json(response);
   } catch (err) {
-    console.log("[/api/upload error]", err);
+    console.log("[/api/processDocX error]", err);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
-async function initiateOCR(url:string) {
+async function initiateDocXProcessing(url:string) {
   // Initiate the OCR process
-  const response = await axios.post('https://pdf-to-image-converter-microserv.onrender.com/convert_pdf_to_images', {
-    pdf_url:url
-  });
-
-  // Return the response, assuming it's an Axios response object
-  return response;
+  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  const fileBuffer = response.data;
+  const result = await mammoth.extractRawText({ buffer: fileBuffer });
+   
+  return result.value;
 }

@@ -16,6 +16,8 @@ fetchData()
     <div
     className='flex
     flex-col
+    
+     
     space-y-2'>
       {files?.length==0&&"You have not uploaded any files"}
       
@@ -24,6 +26,7 @@ fetchData()
     animate-spin
     justify-center
     overflow-y-auto
+    
     items-center
     w-4 h-4'/>}{files?.map((f:File)=>(
       

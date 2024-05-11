@@ -6,6 +6,7 @@ import { createWorker } from 'tesseract.js';
 import axios from 'axios';
 import { useAllFiles } from '@/app/hooks/useAllFiles';
 import { useScanProgressBar } from '@/app/hooks/useProgress';
+import { useTargetText } from '@/app/hooks/useTargetText';
 interface OcrResult {
   documentName: string;
   pageNumber: number;
@@ -14,6 +15,7 @@ interface OcrResult {
 }
 function Scan() {const [ocrResults, setOcrResults] = useState<OcrResult[]>([]);
 const {setProgress,progress}=useScanProgressBar()
+const {targetText}=useTargetText()
 const {setTextMap,files,clear,fetchData,isLoading}=useAllFiles()
  
 const performOCR = async () => {
@@ -61,7 +63,22 @@ const performOCR = async () => {
           setProgress(100);
 
         }
-      } else {
+      } else if(files[i].url.toLowerCase().endsWith('.docx')){
+axios.post('/api/processDocx',{ url: files[i].url }).then((res)=>{
+  const ocrResult = {
+    documentName: files[i].name,
+    pageNumber:  1,
+    text: res.data,
+    url:files[i]?.url
+  };
+  setTextMap(files[i].url + ocrResult.pageNumber, ocrResult);
+  setOcrResults(prevResults => [...prevResults, ocrResult]); 
+}).catch((err)=>{
+  console.log("error while processing docX",err)
+  toast.error("something went wrong please refresh!")
+})
+      } 
+      else {
         console.log("It is an image, wait for it...");
         const worker = await createWorker();
         try {
@@ -97,7 +114,7 @@ const performOCR = async () => {
 
   return (
     <div>
-    <Button disabled={isLoading||((progress==100)?false:true)} onClick={performOCR}>Start Scanning</Button>
+    <Button disabled={isLoading||((progress==100)?false:true)||targetText.length===0||targetText===' '} onClick={performOCR}>Start Scanning</Button>
        
     </div>
   );

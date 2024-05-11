@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs"; 
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { createUploadthing, type FileRouter} from "uploadthing/next";
  
 const f = createUploadthing();
   
@@ -15,7 +15,7 @@ const f = createUploadthing();
   
 export const ourFileRouter = {
     
-courseAttachment:f(["text","pdf","image"])
+courseAttachment:f(["pdf","image","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.openxmlformats-officedocument.wordprocessingml.document"])
 .middleware(()=>handleAuth())
 .onUploadComplete(()=>{}),
 

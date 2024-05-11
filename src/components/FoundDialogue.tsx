@@ -1,5 +1,5 @@
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import Link from 'next/link';
 
@@ -18,13 +18,11 @@ interface FoundDialogueProps {
   export const FoundDialogue = ({ children,targetText,value }: FoundDialogueProps) => {
     // Your component implementation remains the same
     let [isOpen, setIsOpen] = useState(false)
-    const cleanedText = value.text.replace(/\n/g, ' '); // Replace '\n' with space
     let tct = targetText.replace(/\n/g, ' ');
+    console.log("target words",tct)
     const words = tct.toLowerCase().split(' ');
-    const textParts = cleanedText.split(new RegExp(`(${words.join('|')})`, 'gi')); // Split text into parts based on each word in targetText
-    let charCount = 0;
-    const isMatch = words.some(word => textParts.some(part => part.toLowerCase() === word.toLowerCase()));
-    
+    const textParts = value.text.split(new RegExp(`(${words.join('|')})`, 'gi')); // Split text into parts based on each word in targetText
+    console.log(textParts)
     return (
       <>
         <button onClick={() => setIsOpen(true)}>{children}</button>
@@ -43,35 +41,25 @@ interface FoundDialogueProps {
                         
                           {/* Mapping through textParts to highlight matching parts */}
                           {textParts.map((part, index) => {
-                            if (charCount >= 2500) {
-                              return null; // Return null to stop further iteration
-                            }
+                             
                             const isHighlighted = words.some(word => word.length > 0 && part.toLowerCase() === word.toLowerCase());
                             if (isHighlighted) {
                               // If the part matches any word from targetText, highlight it
-                              const partLength = part.length;
-                              if (charCount + partLength <= 2500) {
-                                charCount += partLength;
+                            
                                 return <span className='bg-yellow-400' key={index}>{part}</span>; // Matching part
-                              } else {
-                                const remainingChars = 2500 - charCount;
-                                charCount += remainingChars;
-                                return part.slice(0, remainingChars); // Matching part with remaining characters
-                              }
+                              
                             } else {
-                              // If the part doesn't match, display it as is
-                              const partLength = part.length;
-                              if (charCount + partLength <= 2500) {
-                                charCount += partLength;
-                                return part; // Non-matching part
-                              } else {
-                                const remainingChars = 2500 - charCount;
-                                charCount += remainingChars;
-                                return part.slice(0, remainingChars); // Non-matching part with remaining characters
-                              }
+                             
+                              return part.split('\n').map((text, i) => (
+                                <React.Fragment key={i}>
+                                  {i > 0 && <br />} {/* Render <br> tag for each newline character */}
+                                  {text}
+                                </React.Fragment>
+                              )); // Non-matching part
+                              
                             }
                           })}
-                          {value.text.length > 2500 && <span>...</span>}
+                       
                         </p>
                         {/* Display ellipsis if text length exceeds 550 characters */}
                       </CardContent>

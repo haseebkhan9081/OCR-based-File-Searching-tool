@@ -119,14 +119,14 @@ flex-row gap-x-4
         mt-2
         flex-row
         w-full
+        overflow-auto
         justify-between
 
         items-center'>
 {/* this is for showing all files */}
+
 <div
-className='p-6 ring-1 ring-custom-pale-blue
-overflow-y-auto
-rounded-md'>
+className=' ring-1 ring-custom-pale-blue overflow-y-auto   items-center justify-center flex-col w-[600px] h-[400px] rounded-md  p-6'>
     <h3 className='text-2xl font-semibold mb-1'>Files that will be searched...</h3>
     <PreviewFiles/>
 </div> 
@@ -139,6 +139,7 @@ rounded-md'>
   </div>
 )}
 {TextMap.size > 0 && (
+<> 
   <div className='p-6 ring-1 ring-custom-pale-blue overflow-y-auto space-y-2 items-center justify-center flex-col w-[600px] h-[400px] rounded-md hidden md:flex'>
     {Array.from(TextMap).some(([key, value]) => {
       const cleanedText = value.text.replace(/\n/g, ' '); // Replace '\n' with space
@@ -147,6 +148,8 @@ rounded-md'>
       const isMatch = words.some(word => cleanedText.toLowerCase().includes(word.toLowerCase()));
       return isMatch;
     }) ? (
+  <>  
+
       <Carousel className='w-full max-w-xs'>
         <CarouselContent className='items-center'>
           {/* Mapping through TextMap to display matching items */}
@@ -230,10 +233,12 @@ rounded-md'>
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+      </>
     ) : (
       <div className='text-slate-700 text-center'>Not Found</div>
     )}
   </div>
+  </>
 )}
        </div>
 
