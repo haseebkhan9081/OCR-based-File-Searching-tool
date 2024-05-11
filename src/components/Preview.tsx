@@ -135,7 +135,7 @@ className=' ring-1 ring-custom-pale-blue overflow-y-auto   items-center justify-
 {TextMap.size==0&&(
   <div
   className='text-slate-700 text-center'>
-    Press the Start Scan button to see the Text Extracted from each document in real time
+     Only the Files containing Your keywords will be displayed here
   </div>
 )}
 {TextMap.size > 0 && (
