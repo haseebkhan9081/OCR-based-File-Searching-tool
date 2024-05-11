@@ -65,9 +65,11 @@ export const MultiUploader:React.FC<MultiUploaderprops> = ({
     return (
         <form onSubmit={(e) => { e.preventDefault(); }}>
            <label className="text-center w-full flex
+           justify-center
+           items-center
            flex-col
            " htmlFor="fileInput">
-                {isUploading?"Uploading":<Button>Choose Files</Button>}
+                {isUploading?<div className="w-3/4 p-3 ring-1 rounded-md mb-2 cursor-pointer bg-black text-white">Uploading... {progress}%</div>:<div className="w-3/4 p-3 ring-1 rounded-md mb-2 cursor-pointer bg-black text-white">Choose Files</div>}
                 <Input id="fileInput" type="file" multiple onChange={handleUpload} style={{ display: 'none' }} />
             </label> <div className="flex
              flex-col
@@ -76,7 +78,7 @@ export const MultiUploader:React.FC<MultiUploaderprops> = ({
              items-center
              w-full
              ">
-             <Progress  className="absolute w-3/4 " value={progress} />
+             <Progress  className="absolute w-3/4 h-6" value={progress} />
              <p className="z-10">{fileName}</p></div>
             
         </form>
